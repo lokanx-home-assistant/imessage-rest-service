@@ -42,17 +42,17 @@ If ACCESS_TOKEN is set add header x-access-token with the ACCESS_TOKEN as value
         method: POST_JSON
         verify_ssl: false
         headers: 
-        x-access-token: !secret imessage_access_token
+          x-access-token: !secret imessage_access_token
         message_param_name: "message"
         title_param_name: "title"
         target_param_name: "number"
 
     # Persons
     - name: imessage_john_doe
-        platform: group
-        services:
+      platform: group
+      services:
         - service: imessage
-            data:
+          data:
             target: !secret imessage_number_john_doe
 
 And now you could invoke it from an automation as any other notify service
