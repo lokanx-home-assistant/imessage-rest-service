@@ -11,8 +11,15 @@ This could be used together with Home Assistant REST notify integration
 ### Run: 
 1. Deploy this code to a server (with Mac OS X as OS) running Node.js
 2. Run `npm install`
-3. Add your ACCESS_TOKEN and ALLOWED_IPS to your environment vars to add some basic security
-4. Fire up with `npm start`
+3. Generate certificates (see bellow)
+4. Add your ACCESS_TOKEN and ALLOWED_IPS to your environment vars to add some basic security
+5. Fire up with `npm start`
+
+### Generate SSL Certificates
+
+    openssl req -nodes -days 3650 -new -x509 -keyout server.key -out server.cert
+
+The server.key and server.cert needs to be in the same directory as app.js.
 
 ### Post JSON sample:
 
@@ -49,5 +56,3 @@ If ACCESS_TOKEN is set add header x-access-token with the ACCESS_TOKEN as value
 
 And now you could invoke it from an automation as any other notify service
 
-### TODO:
-* Switch to HTTPS

@@ -20,13 +20,20 @@ const PORT = Number.parseInt(process.env.PORT, 10) || 1337;
 
 // Imports dependencies and set up http server
 const { exec } = require('child_process');
+const https = require('https');
+const fs = require('fs');
 const 
   request = require('request'),
   express = require('express'),
   body_parser = require('body-parser'),
   app = express().use(body_parser.json()); // creates express http server
 
-app.listen(PORT, () => console.log('webhook is listening on port: ' + PORT + (ALLOWED_IPS ? ', allowed: IPs: ' + ALLOWED_IPS : "")));
+https.createServer({
+  key: fs.readFileSync(__dirname + '/server.key'),
+  cert: fs.readFileSync(__dirname + '/server.cert')
+}, app).listen(PORT, () => {
+  console.log('HTTPS webhook is listening on port: ' + PORT + (ALLOWED_IPS ? ', allowed: IPs: ' + ALLOWED_IPS : ""));
+});
 
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {  
