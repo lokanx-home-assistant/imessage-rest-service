@@ -50,6 +50,8 @@ app.post('/webhook', (req, res) => {
   const message = body.message
   const number = body.number || null;
 
+  console.log("About to process: " + JSON.stringify(body));
+  
   if (!number) {
     res.status(500).send('No number...');
     return;
@@ -104,13 +106,14 @@ function sendMessage(message, number, callback) {
         callback(`error: ${error.message}`);
         return;
     }
+
     if (stderr) {
         console.log(`stderr: ${stderr}`);
         callback(`stderr: ${stderr}`);
         return;
     }
-    console.log(`stdout: ${stdout}`);
+
     callback(true);
-});
+  });
 }
 
