@@ -1,6 +1,6 @@
 {
   "name": "imessage-rest-service",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A basic rest service sending imessages",
   "main": "app.js",
   "scripts": {
@@ -12,6 +12,14 @@
   },
   "author": "Björn Sjögren",
   "license": "MIT",
+  "keywords": [
+    "imessage",
+    "rest-service",
+    "node-js",
+    "javascript",
+    "home-automation",
+    "home-assistant"
+  ],
   "dependencies": {
     "body-parser": "^1.15.0",
     "dotenv": "^8.2.0",
