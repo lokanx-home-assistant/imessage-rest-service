@@ -16,7 +16,8 @@ dotenv.config();
 // Get rest service configuration 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const ALLOWED_IPS = process.env.ALLOWED_IPS ? process.env.ALLOWED_IPS.replace(/  +/g, ' ').split(/[\s,;|]+/) : null;
-const PORT = Number.parseInt(process.env.PORT, 10) || 1337;
+const IGNORE_TITLES = process.env.IGNORE_TITLES ? process.env.IGNORE_TITLES.replace(/  +/g, ' ').split(/[\s,;|]+/) : null;
+const PORT = Number.parseInt(process.env.PORT, 10) || 8888;
 
 // Imports dependencies and set up http server
 const { exec } = require('child_process');
@@ -54,6 +55,9 @@ app.post('/webhook', (req, res) => {
   }
 
   const title = body.title;
+  if (isIgnoreTitle(title)) {
+    title = null;
+  }
   const message = body.message
   const number = body.number || null;
 
@@ -102,6 +106,18 @@ function isClientAllowed(req) {
   }
 
   return false;
+}
+
+function isIgnoreTitle(title) {
+  if (!title) {
+    return true;
+  }
+
+  if (!IGNORE_TITLES || IGNORE_TITLES.length === 0) {
+    return false;
+  }
+
+  return IGNORE_TITLES.includes(title);
 }
 
 function sendMessage(message, number, callback) {
