@@ -18,7 +18,7 @@ dotenv.config();
 // Get rest service configuration 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const ALLOWED_IPS = process.env.ALLOWED_IPS ? process.env.ALLOWED_IPS.replace(/  +/g, ' ').split(/[\s,;|]+/) : null;
-const IGNORE_TITLES = process.env.IGNORE_TITLES ? process.env.IGNORE_TITLES.replace(/  +/g, ' ').split(/[\s,;|]+/) : null;
+const IGNORE_TITLES = process.env.IGNORE_TITLES ? process.env.IGNORE_TITLES.split(/[,;|]+/) : null;
 const PORT = Number.parseInt(process.env.PORT, 10) || PORT_DEFAULT;
 const TITLE_MESSAGE_CONCATENATION = process.env.TITLE_MESSAGE_CONCATENATION || TITLE_MESSAGE_CONCATENATION_DEFAULT;
 
