@@ -1,12 +1,14 @@
 # imessage-rest-service
 
-A REST service that will transform incomming data and send it as imessages.
+A REST service that will transform incomming data and send it as imessages. 
+This could for example be used together with Home Assistant REST notify integration.
 
-This service only runs on Mac OS X and needs native message application installed (and logged into an iCloud account)
+This service only runs on Mac OS X and needs native messages application installed (and logged into an iCloud account)
 The numbers that you want to send to needs to be stored under a contact in your address book. 
-The messages will be sent as logged in user in message application.
+The messages will be sent as logged in user in messages application. If using for home automation notifying, I suggest you 
+create a seoarate "system" iCloud account to separate messages from real persons.
 
-This could be used together with Home Assistant REST notify integration
+
 
 ### Run: 
 1. Deploy this code to a server (with Mac OS X as OS) running Node.js
@@ -24,14 +26,22 @@ The server.key and server.cert needs to be in the same directory as app.js.
 ### Post JSON sample:
 
     {
-    "title": "Hej",
-    "message": "Hello there",
-    "number": "+22223445566"
+      "title": "Hej",
+      "message": "Hello there",
+      "number": "+22223445566"
     }
 
-If ACCESS_TOKEN is set add header x-access-token with the ACCESS_TOKEN as value
+### JSON attributes explaination:
+
+    title: Title to prefix message with, format <title> - <message> (optional)
+    message: Message to send, format: plain text (mandatory)
+    number: Phone number that blongs to one of your contacts, format +22223445566
+
+If ACCESS_TOKEN is set in .env add header x-access-token with the ACCESS_TOKEN as value
 
 ### Home Assistant Configuration Example
+
+If want to use this rest service from Home Assistant, this is what should be added
 
     notify:
 
@@ -55,5 +65,29 @@ If ACCESS_TOKEN is set add header x-access-token with the ACCESS_TOKEN as value
           data:
             target: !secret imessage_number_john_doe
 
+Some explanations:
+
+Following needs to be defined in your secrets.yaml
+* imessage_resource 
+* imessage_access_token
+* imessage_number_john_doe
+
+Like this for example:
+
+    # https://<IP_OF_HOME_ASSISTANT_SERVER>:<PORT>/webhook
+    message_resource: https://192.168.1.333:8888/webhook
+    # Access token defined in .env
+    imessage_access_token: 66a4c348-36ff-43b6-aeb8-e9cc122bbe36
+    # Person phone number
+    imessage_number_john_doe: "+22223445566"
+
+The fragment under _# Persons_ could be repeated as many times as you want. Just make sure have a unique name and target defined for each person/number.
+
+If not using access token remove the following lines
+
+        headers: 
+          x-access-token: !secret imessage_access_token
+
+   
 And now you could invoke it from an automation as any other notify service
 
