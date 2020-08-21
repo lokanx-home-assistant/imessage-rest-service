@@ -15,8 +15,9 @@ create a seoarate "system" iCloud account to separate messages from real persons
 1. Deploy this code to a server (with Mac OS X as OS) running Node.js
 2. Run `npm install`
 3. Generate certificates (see bellow)
-4. Add your ACCESS_TOKEN and ALLOWED_IPS to your environment vars to add some basic security
-5. Fire up with `npm start`
+4. Copy and rename .env.sample to .env
+5. Add your ACCESS_TOKEN and ALLOWED_IPS to your environment vars to add some basic security
+6. Fire up with `npm start`
 
 
 ### Generate SSL Certificates
