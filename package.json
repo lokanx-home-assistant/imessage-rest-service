@@ -1,6 +1,6 @@
 {
   "name": "imessage-rest-service",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A basic rest service sending imessages",
   "main": "app.js",
   "scripts": {
