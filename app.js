@@ -57,10 +57,7 @@ app.post('/webhook', (req, res) => {
     return;
   }
 
-  const title = body.title;
-  if (isIgnoreTitle(title)) {
-    title = null;
-  }
+  const title = filterTitle(body.title);
   const message = body.message
   const number = body.number || null;
 
@@ -111,16 +108,16 @@ function isClientAllowed(req) {
   return false;
 }
 
-function isIgnoreTitle(title) {
-  if (!title) {
-    return true;
+function filterTitle(title) {
+  if (!title || (!IGNORE_TITLES || IGNORE_TITLES.length === 0)) {
+    return title;
   }
 
-  if (!IGNORE_TITLES || IGNORE_TITLES.length === 0) {
-    return false;
+  if (IGNORE_TITLES.includes(title)) {
+    return null;
   }
 
-  return IGNORE_TITLES.includes(title);
+  return title;
 }
 
 function sendMessage(message, number, callback) {
