@@ -8,6 +8,8 @@
 'use strict';
 
 const IMESSAGE_CMD = __dirname + '/imessage.sh'
+const TITLE_MESSAGE_CONCATENATION_DEFAULT = ' - ';
+const PORT_DEFAULT = 8888;
 
 // Read .emv file into process.env
 const dotenv = require('dotenv');
@@ -17,7 +19,8 @@ dotenv.config();
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 const ALLOWED_IPS = process.env.ALLOWED_IPS ? process.env.ALLOWED_IPS.replace(/  +/g, ' ').split(/[\s,;|]+/) : null;
 const IGNORE_TITLES = process.env.IGNORE_TITLES ? process.env.IGNORE_TITLES.replace(/  +/g, ' ').split(/[\s,;|]+/) : null;
-const PORT = Number.parseInt(process.env.PORT, 10) || 8888;
+const PORT = Number.parseInt(process.env.PORT, 10) || PORT_DEFAULT;
+const TITLE_MESSAGE_CONCATENATION = process.env.TITLE_MESSAGE_CONCATENATION || TITLE_MESSAGE_CONCATENATION_DEFAULT;
 
 // Imports dependencies and set up http server
 const { exec } = require('child_process');
@@ -33,7 +36,7 @@ https.createServer({
   key: fs.readFileSync(__dirname + '/server.key'),
   cert: fs.readFileSync(__dirname + '/server.cert')
 }, app).listen(PORT, () => {
-  console.log('HTTPS webhook is listening on port: ' + PORT + (ALLOWED_IPS ? ', allowed: IPs: ' + ALLOWED_IPS : ""));
+  console.log('HTTPS webhook is listening on port: ' + PORT + (ALLOWED_IPS ? ', allowed: IPs: ' + ALLOWED_IPS : ''));
 });
 
 // Accepts POST requests at /webhook endpoint
@@ -61,7 +64,7 @@ app.post('/webhook', (req, res) => {
   const message = body.message
   const number = body.number || null;
 
-  console.log("About to process: " + JSON.stringify(body));
+  console.log('About to process: ' + JSON.stringify(body));
   
   if (!number) {
     res.status(500).send('No number...');
@@ -73,7 +76,7 @@ app.post('/webhook', (req, res) => {
     return;
   }
 
-  const completeMessage = title ? title + ' - ' + message : message;
+  const completeMessage = title ? (title + TITLE_MESSAGE_CONCATENATION + message) : message;
 
   console.log('About to send message: \'' + completeMessage + '\', to: ' + number);
 

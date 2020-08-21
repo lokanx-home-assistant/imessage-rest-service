@@ -3,19 +3,21 @@
 A REST service that will transform incomming data and send it as imessages. 
 This could for example be used together with Home Assistant REST notify integration.
 
+The service only supports plain text imessages.
+
 This service only runs on Mac OS X and needs native messages application installed (and logged into an iCloud account)
 The numbers that you want to send to needs to be stored under a contact in your address book. 
 The messages will be sent as logged in user in messages application. If using for home automation notifying, I suggest you 
 create a seoarate "system" iCloud account to separate messages from real persons.
 
 
-
-### Run: 
+### Installation: 
 1. Deploy this code to a server (with Mac OS X as OS) running Node.js
 2. Run `npm install`
 3. Generate certificates (see bellow)
 4. Add your ACCESS_TOKEN and ALLOWED_IPS to your environment vars to add some basic security
 5. Fire up with `npm start`
+
 
 ### Generate SSL Certificates
 
@@ -23,21 +25,27 @@ create a seoarate "system" iCloud account to separate messages from real persons
 
 The server.key and server.cert needs to be in the same directory as app.js.
 
+
 ### Post JSON sample:
 
     {
-      "title": "Hej",
       "message": "Hello there",
-      "number": "+22223445566"
+      "number": "+22223445566",
+      "title": "Hej"
     }
+
 
 ### JSON attributes explaination:
 
-    title: Title to prefix message with, format <title> - <message> (optional)
     message: Message to send, format: plain text (mandatory)
-    number: Phone number that blongs to one of your contacts, format +22223445566
+    number: Phone number that blongs to one of your contacts, format +22223445566 (mandatory)
+    title: Title to prefix message with, format: plain text (optional)
 
-If ACCESS_TOKEN is set in .env add header x-access-token with the ACCESS_TOKEN as value
+If ACCESS_TOKEN is set in .env add http header x-access-token with the your choosen ACCESS_TOKEN as value in all requests to the service.
+
+The complete message that will be sent is in format &lt;title&gt; - &lt;message&gt;.
+If you want to concat title and message with something else between, uncomment and change TITLE_MESSAGE_CONCATENATION in .env.
+
 
 ### Home Assistant Configuration Example
 
